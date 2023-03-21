@@ -1,0 +1,18 @@
+.header__userElements-logout {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  color: #A9A9A9;
+  border: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+
+@media screen and (max-width: 561px) {
+  .header__userElements-logout {
+    margin-top: 18px;
+  }
+}

@@ -1,0 +1,24 @@
+.form__input {
+  background-color: black;
+  color: white;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  margin: 0;
+  padding-bottom: 7px;
+  border: 0;
+  border-bottom: 2px solid #CCCCCC;
+  max-width: 358px;
+  outline: none;
+}
+
+
+@media screen and (max-width: 528px) {
+  .form__input {
+    padding-bottom: 9px;
+  }
+}
+
+.form__input_errors{
+  border-bottom: 2px solid #ff0505;
+}

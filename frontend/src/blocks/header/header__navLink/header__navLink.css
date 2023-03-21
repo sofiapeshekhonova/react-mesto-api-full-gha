@@ -1,0 +1,22 @@
+.header__navLink {
+  display: none;
+  text-decoration: none;
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 22px;
+  text-align: right;
+  color: #FFFFFF;
+}
+
+.header__navLink_active {
+  display: block;
+}
+
+@media screen and (max-width: 528px) {
+  .header__navLink {
+    font-size: 14px;
+    line-height: 17px;
+    margin-right: 30px;
+  }
+}

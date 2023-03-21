@@ -1,0 +1,24 @@
+.form__text {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 17px;
+  margin: 0;
+  padding-bottom: 8px;
+  border: 0;
+  border-bottom: 1px solid rgb(0, 0, 0, .2);
+  width: 100%;
+}
+
+.form__text:focus {
+  outline: none;
+  border-color: rgb(27 11 228 / 98%)
+}
+
+.form__text_error {
+  border-color: rgba(245, 4, 4, 0.763);
+}
+
+.form__text_error:focus {
+  outline: none;
+  border-color:  rgba(245, 4, 4, 0.763);;
+}
