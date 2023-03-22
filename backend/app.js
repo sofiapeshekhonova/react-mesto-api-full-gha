@@ -37,7 +37,7 @@ app.get('/crash-test', () => {
 });
 
 app.use(router);
-app.use(errorLogger); // подключаем логгер ошибок
+app.use(errorLogger);
 
 app.use((req, res, next) => next(new NotFoundError('Неправильный путь')));
 
