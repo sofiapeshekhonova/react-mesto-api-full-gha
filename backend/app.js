@@ -5,7 +5,6 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const NotFoundError = require('./errors/NotFoundError');
 const router = require('./routes');
 const handleErrors = require('./middlewares/handleErrors');
 
@@ -38,9 +37,6 @@ app.get('/crash-test', () => {
 
 app.use(router);
 app.use(errorLogger);
-
-app.use((req, res, next) => next(new NotFoundError('Неправильный путь')));
-
 app.use(errors());
 app.use(handleErrors);
 

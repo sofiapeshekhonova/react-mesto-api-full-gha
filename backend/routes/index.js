@@ -5,6 +5,7 @@ const cardsRoutes = require('./cards');
 const { createUser, login } = require('../controllers/users');
 const auth = require('../middlewares/auth');
 const { URL_CHECK } = require('../utils/constants');
+const NotFoundError = require('../errors/NotFoundError');
 
 router.post('/signup', celebrate({
   body: Joi.object().keys({
@@ -27,5 +28,7 @@ router.use(auth);
 
 router.use('/', usersRoutes);
 router.use('/', cardsRoutes);
+
+router.use((req, res, next) => next(new NotFoundError('Неправильный путь')));
 
 module.exports = router;
