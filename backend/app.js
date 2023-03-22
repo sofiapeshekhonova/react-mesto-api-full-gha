@@ -1,14 +1,13 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const { errors, celebrate, Joi } = require('celebrate');
-const usersRoutes = require('./routes/users');
-const { createUser, login } = require('./controllers/users');
-const auth = require('./middlewares/auth');
+const { errors } = require('celebrate');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
-const cardsRoutes = require('./routes/cards');
-const { INTERNAL_SERVER_ERROR, NOT_FOUND } = require('./errors/errors_constants');
+const NotFoundError = require('./errors/NotFoundError');
+const router = require('./routes');
+const handleErrors = require('./middlewares/handleErrors');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -37,42 +36,12 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.post('/signup', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(8),
-    name: Joi.string().min(2).max(30),
-    about: Joi.string().min(2).max(30),
-    avatar: Joi.string().regex(/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/),
-  }),
-}), createUser);
-
-app.post('/signin', celebrate({
-  body: Joi.object().keys({
-    email: Joi.string().required().email(),
-    password: Joi.string().required().min(6),
-  }),
-}), login);
-
-app.use('/', auth, usersRoutes);
-app.use('/', auth, cardsRoutes);
-
+app.use(router);
 app.use(errorLogger); // подключаем логгер ошибок
+
+app.use((req, res, next) => next(new NotFoundError('Неправильный путь')));
+
 app.use(errors());
-
-app.use(
-  (req, res) => {
-    res.status(NOT_FOUND).send({ message: 'Неправильный путь' });
-  },
-);
-
-app.use((err, req, res, next) => {
-  if (err.statusCode) {
-    res.status(err.statusCode).send({ message: err.message });
-  } else {
-    res.status(INTERNAL_SERVER_ERROR).send({ message: 'На сервере произошла ошибка' });
-  }
-  next();
-});
+app.use(handleErrors);
 
 app.listen(PORT);

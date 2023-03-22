@@ -1,26 +1,13 @@
 const Card = require('../models/card');
 const BadRequestError = require('../errors/BadRequestError');
-const InternalServerError = require('../errors/InternalServerError');
 const NotFoundError = require('../errors/NotFoundError');
 const OwnerError = require('../errors/OwnerError');
 
 // GET /cards — возвращает все карточки
 module.exports.getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => {
-      if (!cards) {
-        throw new NotFoundError('Пользователь по указанному _id не найден');
-      }
-      return res.send(cards);
-    })
-    //
-    .catch((err) => {
-      if (err.name === 'InternalServerError') {
-        next(new InternalServerError('На сервере произошла ошибка'));
-      } else {
-        next(err);
-      }
-    });
+    .then((cards) => res.send(cards))
+    .catch((err) => next(err));
 };
 
 //  POST /cards — создаёт карточку
@@ -32,8 +19,6 @@ module.exports.createCard = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные при создании карточки'));
-      } else if (err.name === 'InternalServerError') {
-        next(new InternalServerError('На сервере произошла ошибка'));
       } else {
         next(err);
       }
@@ -55,7 +40,7 @@ module.exports.deleteCards = (req, res, next) => {
           })
           .catch(next);
       } else {
-        throw new OwnerError('Карточка с указанным _id не найдена.');
+        throw new OwnerError('Чужую карточку удалить нельзя');
       }
     })
     .catch((err) => {
@@ -83,8 +68,6 @@ module.exports.putLikes = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Переданы некорректные данные для постановки лайка.'));
-      } else if (err.name === 'InternalServerError') {
-        next(new InternalServerError('На сервере произошла ошибка'));
       } else {
         next(err);
       }
@@ -107,8 +90,6 @@ module.exports.deleteLikes = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BadRequestError('Переданы некорректные данные для постановки лайка.'));
-      } else if (err.name === 'InternalServerError') {
-        next(new InternalServerError('На сервере произошла ошибка'));
       } else {
         next(err);
       }

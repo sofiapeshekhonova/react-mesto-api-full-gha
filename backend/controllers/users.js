@@ -4,7 +4,6 @@ const User = require('../models/user');
 
 const BadRequestError = require('../errors/BadRequestError');
 const DuplicateError = require('../errors/DuplicateError');
-const InternalServerError = require('../errors/InternalServerError');
 const NotFoundError = require('../errors/NotFoundError');
 
 const { NODE_ENV, JWT_SECRET } = process.env;
@@ -14,13 +13,7 @@ module.exports.createUser = (req, res, next) => {
   const {
     name, about, avatar, email, password,
   } = req.body;
-  User.findOne({ email })
-    .then((user) => {
-      if (user) {
-        throw new DuplicateError('Пользователь с такой почтой уже зарегестрирован');
-      }
-      return bcrypt.hash(password, 10);
-    })
+  bcrypt.hash(password, 10)
     .then((hash) => User.create({
       name,
       about,
@@ -47,20 +40,16 @@ module.exports.createUser = (req, res, next) => {
 };
 
 // post/signin
-module.exports.login = (req, res) => {
+module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
   return User.findUserByCredentials(email, password)
     .then((user) => {
       const token = jwt.sign({ _id: user._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
-      // тут поменяла
-      // res.status(200).send({ _id: token, message: 'Пользователь зарегестрирован' });
       res.send({ token });
     })
     .catch((err) => {
-      res
-        .status(401)
-        .send({ message: err.message });
+      next(err);
     });
 };
 
@@ -82,13 +71,7 @@ module.exports.getUser = (req, res, next) => {
 module.exports.getUsers = (req, res, next) => {
   User.find({})
     .then((users) => res.send(users))
-    .catch((err) => {
-      if (err.name === 'InternalServerError') {
-        next(new InternalServerError('На сервере произошла ошибка'));
-      } else {
-        next(err);
-      }
-    });
+    .catch((err) => next(err));
 };
 
 // GET /users/:userId - возвращает пользователя по _id
@@ -96,7 +79,7 @@ module.exports.findUsersById = (req, res, next) => {
   User.findById(req.params.id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('пользователя с несуществующим в БД id');
+        throw new NotFoundError('пользователь с несуществующим в БД id');
       }
       return res.send(user);
     })
@@ -122,8 +105,6 @@ module.exports.updateUser = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
-      } else if (err.name === 'InternalServerError') {
-        next(new InternalServerError('На сервере произошла ошибка'));
       } else {
         next(err);
       }
@@ -143,8 +124,6 @@ module.exports.patchUsersAvatar = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new BadRequestError('Переданы некорректные данные при создании пользователя'));
-      } else if (err.name === 'InternalServerError') {
-        next(new InternalServerError('На сервере произошла ошибка'));
       } else {
         next(err);
       }

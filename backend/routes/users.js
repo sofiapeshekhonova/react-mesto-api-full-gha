@@ -11,6 +11,8 @@ const {
   getUser,
 } = require('../controllers/users');
 
+const { URL_CHECK } = require('../utils/constants');
+
 router.get('/users', getUsers);
 router.get('/users/me', getUser);
 
@@ -29,7 +31,7 @@ router.patch('/users/me', celebrate({
 
 router.patch('/users/me/avatar', celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required().regex(/(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-/]))?/),
+    avatar: Joi.string().required().regex(URL_CHECK),
   }),
 }), patchUsersAvatar);
 
