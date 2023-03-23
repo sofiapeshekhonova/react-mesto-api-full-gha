@@ -11,7 +11,7 @@
 
 ## Ссылки на проект
 
-IP 158.160.49.157
+IP 158.160.59.193
 
 Frontend https://mesto1.peshekhonova.nomoredomains.work
 
