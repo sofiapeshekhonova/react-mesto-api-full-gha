@@ -7,16 +7,7 @@
 Бэкенд `backend/`
 Фронтенд  `frontend/`
 
-Адрес репозитория: https://github.com/sofiapeshekhonova/react-mesto-api-full-gha
-
 ## Ссылки на проект
-
-IP 158.160.59.193
-
-Frontend https://mesto1.peshekhonova.nomoredomains.work
-
-Backend https://api.mesto1.peshekhonova.nomoredomains.work
-
 
 Ознакомится с проектом: [GH-pages](https://sofiapeshekhonova.github.io/react-mesto-auth/)
 <div align="left">
