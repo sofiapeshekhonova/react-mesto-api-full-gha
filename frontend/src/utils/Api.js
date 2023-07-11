@@ -115,6 +115,6 @@ class Api {
 }
 
 export const api = new Api({
- baseUrl: 'https://api.mesto1.peshekhonova.nomoredomains.work'
- // baseUrl: 'http://localhost:3001',
+ baseUrl: 'http://localhost:3001',
+ //baseUrl: 'https://auth.nomoreparties.co',
 });

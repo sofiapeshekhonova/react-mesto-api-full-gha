@@ -1,6 +1,5 @@
 //export const BASE_URL = 'https://auth.nomoreparties.co';
-export const BASE_URL = 'https://api.mesto1.peshekhonova.nomoredomains.work'; //удаленный бекенд
-// export const BASE_URL = 'http://localhost:3001'
+export const BASE_URL = 'http://localhost:3001'
 
 function checkResponse(res) {
     if(res.ok) {
@@ -36,10 +35,6 @@ export const login = (password, email) => {
   .then((res) => {
     return checkResponse(res)
   })
-  // .then((data) => {
-  //   localStorage.setItem('jwt', data.token)
-  //   return data
-  // })
 }; 
 
 export const checkToken = (token) => {

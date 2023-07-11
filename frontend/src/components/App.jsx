@@ -50,7 +50,7 @@ function App() {
           if (res){
             isloggedIn(true); // авторизуем пользователя
             setUserEmail(res.email) //получаем данные пользователя
-            navigate("/", {replace: true})
+            // navigate("/", {replace: true})
           }
         })
         .catch((err) => {
@@ -289,6 +289,7 @@ function App() {
     isloggedIn(false); 
     setUserEmail('');
   }
+  
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
